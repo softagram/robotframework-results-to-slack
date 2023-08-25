@@ -1,0 +1,49 @@
+name: Robot Framework Results to Slack
+description: Send Robot Framework results to Slack
+author: NotMixu <not@mixu.dev>
+inputs:
+  output_xml_path:
+    description: Path to the output.xml file
+    required: true
+  slack_webhook_url:
+    description: Slack webhook URL
+    required: true
+  slack_channel:
+    description: Slack channel to post to
+    required: true
+  slack_username:
+    description: Slack username to post as
+    required: false
+    default: GitHub Actions
+  slack_icon:
+    description: Slack icon to use
+    required: false
+    default: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+  slack_header:
+    description: Header to use in the Slack message embed
+    required: false
+    default: 'Robot Framework Results'
+  alert_channel_on_failure:
+    description: Whether to alert channel members on failure (some tests failed)
+    required: false
+    default: 'true'
+  alert_channel_on_skipped:
+    description: Whether to alert channel members on skipped tests (some tests were skipped)
+    required: false
+    default: 'false'
+  alert_channel_on_success:
+    description: Whether to alert channel members on success (all tests passed)
+    required: false
+    default: 'false'
+  alert_channel_on_no_output:
+    description: Whether to alert channel members when no output file is found
+    required: false
+    default: 'true'
+  no_output_found_message:
+    description: Message to post when no output file is found
+    required: false
+    default: 'No report found, something is probably wrong!'
+
+runs:
+  using: "node16"
+  main: "lib/index.js"

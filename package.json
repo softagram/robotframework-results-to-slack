@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NotMixu/robotframework-results-to-slack.git"
+    "url": "git+https://github.com/softagram/robotframework-results-to-slack.git"
   },
   "keywords": [
     "actions",
@@ -19,7 +19,7 @@
     "results",
     "slack"
   ],
-  "author": "NotMixu <not@mixu.dev>",
+  "author": "Softagram",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.10.0",

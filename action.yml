@@ -1,6 +1,6 @@
 name: Robot Framework Results to Slack
 description: Send Robot Framework results to Slack
-author: NotMixu <not@mixu.dev>
+author: Softagram
 inputs:
   output_xml_path:
     description: Path to the output.xml file
@@ -22,28 +22,28 @@ inputs:
   slack_header:
     description: Header to use in the Slack message embed
     required: false
-    default: 'Robot Framework Results'
+    default: Robot Framework Results
   alert_channel_on_failure:
     description: Whether to alert channel members on failure (some tests failed)
     required: false
-    default: 'true'
+    default: "true"
   alert_channel_on_skipped:
     description: Whether to alert channel members on skipped tests (some tests were skipped)
     required: false
-    default: 'false'
+    default: "false"
   alert_channel_on_success:
     description: Whether to alert channel members on success (all tests passed)
     required: false
-    default: 'false'
+    default: "false"
   alert_channel_on_no_output:
     description: Whether to alert channel members when no output file is found
     required: false
-    default: 'true'
+    default: "true"
   no_output_found_message:
     description: Message to post when no output file is found
     required: false
-    default: 'No report found, something is probably wrong!'
+    default: No report found, something is probably wrong!
 
 runs:
-  using: "node16"
-  main: "lib/index.js"
+  using: node16
+  main: dist/index.js

@@ -1,6 +1,8 @@
 {
   "name": "robotframework-results-to-slack",
   "version": "1.0.0",
+  "author": "Softagram",
+  "license": "MIT",
   "private": true,
   "description": "Send Robot Framework results to Slack",
   "main": "lib/index.js",
@@ -19,8 +21,6 @@
     "results",
     "slack"
   ],
-  "author": "Softagram",
-  "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/github": "^5.1.1",
@@ -31,6 +31,12 @@
   "devDependencies": {
     "@types/node": "^20.5.4",
     "@vercel/ncc": "^0.36.1",
+    "husky": "^8.0.3",
     "typescript": "^5.1.6"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run package"
+    }
   }
 }

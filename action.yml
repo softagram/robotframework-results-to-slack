@@ -22,7 +22,7 @@ inputs:
   slack_header:
     description: Header to use in the Slack message embed
     required: false
-    default: Robot Framework Results
+    default: Robot Test Results
   alert_channel_on_failure:
     description: Whether to alert channel members on failure (some tests failed)
     required: false

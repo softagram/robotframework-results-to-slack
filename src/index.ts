@@ -1,8 +1,8 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import { readFile } from "fs/promises";
-import { parse } from "date-fns";
 import { IncomingWebhook } from "@slack/webhook";
+import { parse } from "date-fns";
+import { readFile } from "fs/promises";
 
 interface Stats {
   passed: number;
@@ -127,11 +127,20 @@ class RobotFrameworkResultsToSlack {
   }
 
   private async sendStats(stats: Stats): Promise<void> {
+    const alertChannel =
+      (stats.failed > 0 && this.alertChannelOnFailure) ||
+      (stats.skipped > 0 && this.alertChannelOnSkipped) ||
+      (stats.successRate === 100 && this.alertChannelOnSuccess);
+
+    const text = alertChannel
+      ? `<!channel> ${this.slackHeader}`
+      : this.slackHeader;
+
     const attachments = [
       {
-        color: this.getColor(stats),
-        text: this.slackHeader,
         mrkdwn_in: ["text", "fields"],
+        color: this.getColor(stats),
+        text,
         ts: stats.timestamp,
         fields: [
           {
@@ -155,6 +164,13 @@ class RobotFrameworkResultsToSlack {
             short: true,
           },
         ],
+        actions: [
+          {
+            type: "button",
+            text: "View Report",
+            url: `${github.context.payload.repository?.html_url}/actions/runs/${github.context.runId}`,
+          },
+        ],
       },
     ];
 
@@ -172,7 +188,7 @@ class RobotFrameworkResultsToSlack {
     await webhook.send({
       channel: this.slackChannel,
       username: this.slackUsername,
-      icon_emoji: this.slackIcon,
+      icon_url: this.slackIcon,
       text: message,
       attachments,
     });

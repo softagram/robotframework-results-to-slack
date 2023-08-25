@@ -49,7 +49,7 @@ class RobotFrameworkResultsToSlack {
         this.outputXmlPath = core.getInput("output_xml_path", {
             required: true,
         });
-        this.slackToken = core.getInput("slack_token", {
+        this.slackWebhookUrl = core.getInput("slack_webhook_url", {
             required: true,
         });
         this.slackChannel = core.getInput("slack_channel", {
@@ -86,10 +86,9 @@ class RobotFrameworkResultsToSlack {
                     core.setFailed("Error getting stats from XML");
                     return;
                 }
-                this.sendStats(stats);
+                yield this.sendStats(stats);
             }
             catch (error) {
-                core.error(`Error getting stats: ${error}`);
                 core.setFailed(error.message);
                 return;
             }
@@ -145,41 +144,43 @@ class RobotFrameworkResultsToSlack {
         return "#E01E5A";
     }
     sendStats(stats) {
-        const attachments = [
-            {
-                color: this.getColor(stats),
-                text: this.slackHeader,
-                mrkdwn_in: ["text", "fields"],
-                ts: stats.timestamp,
-                fields: [
-                    {
-                        title: "*Passed:*",
-                        value: stats.passed.toString(),
-                        short: true,
-                    },
-                    {
-                        title: "*Failed:*",
-                        value: stats.failed.toString(),
-                        short: true,
-                    },
-                    {
-                        title: "*Skipped:*",
-                        value: stats.skipped.toString(),
-                        short: true,
-                    },
-                    {
-                        title: "*Success Rate:*",
-                        value: `${stats.successRate}%`,
-                        short: true,
-                    },
-                ],
-            },
-        ];
-        this.sendSlackMessage(`Robot Test Results #${github.context.runNumber}`, attachments);
+        return __awaiter(this, void 0, void 0, function* () {
+            const attachments = [
+                {
+                    color: this.getColor(stats),
+                    text: this.slackHeader,
+                    mrkdwn_in: ["text", "fields"],
+                    ts: stats.timestamp,
+                    fields: [
+                        {
+                            title: "*Passed:*",
+                            value: stats.passed.toString(),
+                            short: true,
+                        },
+                        {
+                            title: "*Failed:*",
+                            value: stats.failed.toString(),
+                            short: true,
+                        },
+                        {
+                            title: "*Skipped:*",
+                            value: stats.skipped.toString(),
+                            short: true,
+                        },
+                        {
+                            title: "*Success Rate:*",
+                            value: `${stats.successRate}%`,
+                            short: true,
+                        },
+                    ],
+                },
+            ];
+            yield this.sendSlackMessage(`Robot Test Results #${github.context.runNumber}`, attachments);
+        });
     }
     sendSlackMessage(message, attachments = []) {
         return __awaiter(this, void 0, void 0, function* () {
-            const webhook = new webhook_1.IncomingWebhook(this.slackToken);
+            const webhook = new webhook_1.IncomingWebhook(this.slackWebhookUrl);
             yield webhook.send({
                 channel: this.slackChannel,
                 username: this.slackUsername,

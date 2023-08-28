@@ -167,8 +167,10 @@ class RobotFrameworkResultsToSlack {
         actions: [
           {
             type: "button",
-            text: "View Report",
-            url: `${github.context.payload.repository?.html_url}/actions/runs/${github.context.runId}`,
+            text: "View Run",
+            url: `
+              https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}
+            `,
           },
         ],
       },

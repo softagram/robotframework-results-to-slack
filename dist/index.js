@@ -41,9 +41,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-const promises_1 = __nccwpck_require__(3292);
-const date_fns_1 = __nccwpck_require__(3314);
 const webhook_1 = __nccwpck_require__(1095);
+const date_fns_1 = __nccwpck_require__(3314);
+const promises_1 = __nccwpck_require__(3292);
 class RobotFrameworkResultsToSlack {
     constructor() {
         this.outputXmlPath = core.getInput("output_xml_path", {
@@ -145,11 +145,17 @@ class RobotFrameworkResultsToSlack {
     }
     sendStats(stats) {
         return __awaiter(this, void 0, void 0, function* () {
+            const alertChannel = (stats.failed > 0 && this.alertChannelOnFailure) ||
+                (stats.skipped > 0 && this.alertChannelOnSkipped) ||
+                (stats.successRate === 100 && this.alertChannelOnSuccess);
+            const text = alertChannel
+                ? `<!channel> ${this.slackHeader}`
+                : this.slackHeader;
             const attachments = [
                 {
-                    color: this.getColor(stats),
-                    text: this.slackHeader,
                     mrkdwn_in: ["text", "fields"],
+                    color: this.getColor(stats),
+                    text,
                     ts: stats.timestamp,
                     fields: [
                         {
@@ -173,6 +179,15 @@ class RobotFrameworkResultsToSlack {
                             short: true,
                         },
                     ],
+                    actions: [
+                        {
+                            type: "button",
+                            text: "View Run",
+                            url: `
+              https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}
+            `,
+                        },
+                    ],
                 },
             ];
             yield this.sendSlackMessage(`Robot Test Results #${github.context.runNumber}`, attachments);
@@ -184,7 +199,7 @@ class RobotFrameworkResultsToSlack {
             yield webhook.send({
                 channel: this.slackChannel,
                 username: this.slackUsername,
-                icon_emoji: this.slackIcon,
+                icon_url: this.slackIcon,
                 text: message,
                 attachments,
             });
@@ -6379,7 +6394,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IncomingWebhook = void 0;
-const axios_1 = __importDefault(__nccwpck_require__(3926));
+const axios_1 = __importDefault(__nccwpck_require__(6545));
 const errors_1 = __nccwpck_require__(8564);
 const instrument_1 = __nccwpck_require__(8645);
 /**
@@ -6576,7 +6591,7 @@ exports.getUserAgent = getUserAgent;
 
 /***/ }),
 
-/***/ 3926:
+/***/ 6545:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 module.exports = __nccwpck_require__(2618);
@@ -13038,7 +13053,7 @@ module.exports = exports.default;
 
 /***/ }),
 
-/***/ 6545:
+/***/ 1500:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -13479,7 +13494,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = eachWeekendOfInterval;
-var _index = _interopRequireDefault(__nccwpck_require__(6545));
+var _index = _interopRequireDefault(__nccwpck_require__(1500));
 var _index2 = _interopRequireDefault(__nccwpck_require__(5852));
 var _index3 = _interopRequireDefault(__nccwpck_require__(403));
 var _index4 = _interopRequireDefault(__nccwpck_require__(2063));
@@ -19074,7 +19089,7 @@ var _index34 = _interopRequireDefault(__nccwpck_require__(7074));
 var _index35 = _interopRequireDefault(__nccwpck_require__(9448));
 var _index36 = _interopRequireDefault(__nccwpck_require__(2701));
 var _index37 = _interopRequireDefault(__nccwpck_require__(3959));
-var _index38 = _interopRequireDefault(__nccwpck_require__(6545));
+var _index38 = _interopRequireDefault(__nccwpck_require__(1500));
 var _index39 = _interopRequireDefault(__nccwpck_require__(6802));
 var _index40 = _interopRequireDefault(__nccwpck_require__(2029));
 var _index41 = _interopRequireDefault(__nccwpck_require__(5879));

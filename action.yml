@@ -45,5 +45,5 @@ inputs:
     default: No report found, something is probably wrong!
 
 runs:
-  using: node16
+  using: node24
   main: dist/index.js
